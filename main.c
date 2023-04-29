@@ -1,6 +1,3 @@
-// GAMIT TAYO NG GOTOXY AH PARA MAGANDA SA DISPLAY
-// WALA PANG GOTOXY ITO XDXDXD
-
 #include <unistd.h>  // for sleep function or delay
 #include <stdio.h>
 #include <stdlib.h>
@@ -109,12 +106,12 @@ int main()
                     printf("and can now make a reservation!\n");
                     getch();
                     break;
-            case 2: hotel_information(); // WALA PA
+            case 2: hotel_information(); // NEED TULONG 
                     break;
             case 3: printf("Availability:\n"); // WALA PA
                     hotel_information();
                     break;
-            case 4: make_reservation(); // KAILANGAN AYUSIN GALING CHATGPT EH AHAHA
+            case 4: make_reservation(); // ON-GOING
                     break;
             case 5: printf("\n\tThank you for visiting our site!\n");
                     break;
@@ -124,15 +121,6 @@ int main()
 
 return 0;
 }
-
-void gotoxy(int x,int y)
-{
-    COORD coord = {0,0};
-    coord.X=x;
-    coord.Y=y;
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coord);
-}
-
 
 
 void register_user()
@@ -201,6 +189,9 @@ void save_user(User user)
 
 void hotel_information() // HOTEL INFORMATION
 {
+    printf("\nHOTEL INFORMATION\n");
+    printf("\nThis Hotel serves a 12hours reservation which is Day and Night\n");
+
     printf("Room ID\tType\tPrice\tAvailable Rooms\n");
 
 
@@ -214,44 +205,56 @@ void hotel_information() // HOTEL INFORMATION
 int make_reservation() // KAILANGAN AYUSIN GALING CHATGPT EH HAHAHAHA
 {
     printf("\nMAKE A RESERVATION\n");
-    Reservation res;
 
-    printf("Name: ");
-    scanf("%s", res.name);
-    printf("Date of Reservation (mm-dd-yyyy): ");
-    scanf("%s", res.date);
-    printf("Room Type (standard/deluxe/suite): ");
-    scanf("%s", res.type);
+        // get reservation details
+    Reservation reservation;
+    printf("\nDate (MM/DD/YY): ");
+    scanf("%s", reservation.date);
+
+    printf("Room Type (Standard/Deluxe/Suite): ");
+    scanf("%s", reservation.type);
+
+    printf("Number of Rooms: ");
+    scanf("%d", &reservation.room_num);
 
 
-    int room_num = -1;
-    for (int i = 0; i < num_rooms; i++)
+
+    // calculate bill
+    float price;
+    if (strcmp(reservation.type, "Standard") == 0)
         {
-    if (strcmp(res.type, rooms[i].type) == 0 && rooms[i].available_rooms > 0)
-    {
-         room_num = rooms[i].id;
-         rooms[i].available_rooms--;
-         rooms[i].total_rooms--;
-         break;
-      }
-    }
-     if (room_num == -1) {
-     printf("Sorry, no rooms of this type are available at the moment.\n");
-      return 0;
+        price = 3000.0;
+        printf("\nStandard = 3,000");
         }
-    res.room_num = room_num;
+    else if (strcmp(reservation.type, "Deluxe") == 0)
+        {
+        price = 6000.0;
+        printf("\nDeluxe = 6,000");
+        }
+    else if (strcmp(reservation.type, "Suite") == 0)
+        {
+        price = 10000.0;
+        printf("\nSuite = 10,000");
+        }
+    else{
+        printf("\nInvalid room type. Please try again.\n");
+        sleep(2); // delay
+        return;
+    }
 
-    float bill = rooms[room_num - 1].price; // NOT FINAL
-    res.bill = bill;
-    printf("Your Bill is: $%.2f\n", bill);
-    printf("Reservation Successful!\n");
-    printf("Your Reservation Number is: %d\n", num_reservations + 1);
-    display_reservation_details(res);
-    save_reservation(res); // to save the reservation of the user in txt file
-    num_reservations++;
+    reservation.bill = price * reservation.room_num;
 
-      return 1;
+
+    // save reservation
+    save_reservation(reservation);
+    printf("\nReservation successful! Total Bill: %.2f\n", reservation.bill);
+    display_reservation_details(reservation);
+    sleep(5); // delay
 }
+
+
+
+
 
 
 void display_reservation_details(Reservation res)
@@ -276,12 +279,30 @@ void save_reservation(Reservation res) // saves in the reservations.txt
 
 void retrieve_rooms() // retrieval for available rooms
 {
-
+    FILE* file = fopen(room_file, "r");
+    char line[MAX_TYPE_LENGTH + 2];
+    while (fgets(line, sizeof(line), file))
+    {
+        Room room;
+        sscanf(line, "%d %s %f %d %d", &room.id, room.type, &room.price, &room.available_rooms, &room.total_rooms);
+        rooms[num_rooms] = room;
+        num_rooms++;
+    }
+    fclose(file);
 }
 
 void retrieve_reservations() // retrieval for reservations
 {
+    FILE* file = fopen(reservation_file, "r");
+    char line[MAX_NAME_LENGTH + MAX_DATE_LENGTH + MAX_TYPE_LENGTH + 26];
 
+    while (fgets(line, sizeof(line), file))
+    {
+       Reservation res;
+       sscanf(line, "%s %s %s %d %d %f", res.name, res.date, res.type, &res.room_num, &res.bill);
+       display_reservation_details(res);
+    }
+     fclose(file);
 }
 
 void retrieve_data() // retrieval
@@ -290,4 +311,11 @@ void retrieve_data() // retrieval
     retrieve_reservations();
 }
 
+void gotoxy(int x,int y)
+{
+    COORD coord = {0,0};
+    coord.X=x;
+    coord.Y=y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coord);
+}
 
