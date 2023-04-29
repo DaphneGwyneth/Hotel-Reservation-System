@@ -50,37 +50,14 @@ char room_file[] = "rooms.txt";
 int x, y; //for gotoxy
 // wala yung user kasi gumagawa sya sarili nyang file per new user
 
-void display_menu()
-{
-    printf("-------------------------------------------------\n");
-    printf("|\t    Hotel --- Reservation       \t|\n");
-    printf("-------------------------------------------------\n");
-    printf("|\t\t\t\t\t\t|\n");
-    printf("|\t    1. Registration       \t\t|\n");
-    printf("|\t    2. Hotel Information       \t\t|\n");
-    printf("|\t    3. Availability       \t\t|\n");
-    printf("|\t    4. Reservation       \t\t|\n");
-    printf("|\t    5. Exit       \t\t\t|\n");
-    printf("-------------------------------------------------\n");
-
-
-}
-
 
 int main()
 {
     retrieve_data(); // for retrieval
-    int choice = 0;
 
-    while (choice != 5)
+    while(1)
         {
-          system("cls");
-          display_menu();
-          printf("|\t    Enter your choice:       \t\t|\n");
-          printf("-------------------------------------------------\n");
-          gotoxy(31,10); scanf("%d", &choice);
-
-          switch (choice)
+          switch (display_menu())
           {
             case 1: register_user();// ON-GOING
                     break;
@@ -99,6 +76,30 @@ int main()
 
 return 0;
 }
+
+
+void display_menu()
+{
+    int choice;
+    printf("-------------------------------------------------\n");
+    printf("|\t    Hotel --- Reservation       \t|\n");
+    printf("-------------------------------------------------\n");
+    printf("|\t\t\t\t\t\t|\n");
+    printf("|\t    1. Registration       \t\t|\n");
+    printf("|\t    2. Hotel Information       \t\t|\n");
+    printf("|\t    3. Availability       \t\t|\n");
+    printf("|\t    4. Reservation       \t\t|\n");
+    printf("|\t    5. Exit       \t\t\t|\n");
+    printf("-------------------------------------------------\n");
+    printf("|\t    Enter your choice:       \t\t|\n");
+    printf("-------------------------------------------------\n");
+    gotoxy(31,10); scanf("%d", &choice);
+    return choice;
+
+
+}
+
+
 
 void gotoxy(int x,int y)
 {
