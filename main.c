@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
+#include <windows.h>
 
 #define MAX_ROOMS 100
 #define MAX_NAME_LENGTH 50
@@ -46,16 +47,23 @@ int num_rooms = 0;
 int num_reservations = 0;
 char reservation_file[] = "reservations.txt";
 char room_file[] = "rooms.txt";
+int x, y; //for gotoxy
 // wala yung user kasi gumagawa sya sarili nyang file per new user
 
 void display_menu()
 {
-    printf("\nHOTEL RESERVATION MENU\n");
-    printf("1. Registration\n");
-    printf("2. Hotel Information\n");
-    printf("3. Availability\n");
-    printf("4. Reservation\n");
-    printf("5. Exit\n");
+    printf("-------------------------------------------------\n");
+    printf("|\t    Hotel --- Reservation       \t|\n");
+    printf("-------------------------------------------------\n");
+    printf("|\t\t\t\t\t\t|\n");
+    printf("|\t    1. Registration       \t\t|\n");
+    printf("|\t    2. Hotel Information       \t\t|\n");
+    printf("|\t    3. Availability       \t\t|\n");
+    printf("|\t    4. Reservation       \t\t|\n");
+    printf("|\t    5. Exit       \t\t\t|\n");
+    printf("-------------------------------------------------\n");
+
+
 }
 
 
@@ -68,12 +76,13 @@ int main()
         {
           system("cls");
           display_menu();
-          printf("Enter your choice: ");
-          scanf("%d", &choice);
+          printf("|\t    Enter your choice:       \t\t|\n");
+          printf("-------------------------------------------------\n");
+          gotoxy(31,10); scanf("%d", &choice);
 
           switch (choice)
           {
-            case 1: register_user(); // ON-GOING
+            case 1: register_user();// ON-GOING
                     break;
             case 2: hotel_information(); // WALA PA
                     break;
@@ -90,6 +99,15 @@ int main()
 
 return 0;
 }
+
+void gotoxy(int x,int y)
+{
+    COORD coord = {0,0};
+    coord.X=x;
+    coord.Y=y;
+    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coord);
+}
+
 
 
 void register_user()
@@ -159,7 +177,7 @@ void save_user(User user)
 void hotel_information() // HOTEL INFORMATION
 {
     printf("Room ID\tType\tPrice\tAvailable Rooms\n");
-    // WALA PA
+
 
     for (int i = 0; i < num_rooms; i++) {
         printf("%d\t%s\t%.2f\t%d/%d\n", rooms[i].id, rooms[i].type, rooms[i].price, rooms[i].available_rooms, rooms[i].total_rooms);
