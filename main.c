@@ -50,37 +50,8 @@ char room_file[] = "rooms.txt";
 int x, y; //for gotoxy
 // wala yung user kasi gumagawa sya sarili nyang file per new user
 
-
-int main()
-{
-    retrieve_data(); // for retrieval
-
-    while(1)
-        {
-          switch (display_menu())
-          {
-            case 1: register_user();// ON-GOING
-                    break;
-            case 2: hotel_information(); // WALA PA
-                    break;
-            case 3: printf("Availability:\n"); // WALA PA
-                    hotel_information();
-                    break;
-            case 4: make_reservation(); // KAILANGAN AYUSIN GALING CHATGPT EH AHAHA
-                    break;
-            case 5: printf("Thank you for visiting our site!\n");
-                    break;
-            default: printf("Invalid choice!\n");
-          }
-        }
-
-return 0;
-}
-
-
 void display_menu()
 {
-    int choice;
     printf("-------------------------------------------------\n");
     printf("|\t    Hotel --- Reservation       \t|\n");
     printf("-------------------------------------------------\n");
@@ -91,15 +62,68 @@ void display_menu()
     printf("|\t    4. Reservation       \t\t|\n");
     printf("|\t    5. Exit       \t\t\t|\n");
     printf("-------------------------------------------------\n");
-    printf("|\t    Enter your choice:       \t\t|\n");
-    printf("-------------------------------------------------\n");
-    gotoxy(31,10); scanf("%d", &choice);
-    return choice;
 
 
 }
 
 
+int main()
+{
+    retrieve_data(); // for retrieval
+    int choice = 0;
+
+    while (choice != 1){    //Registration or login verification
+          system("cls");    //Users cannot make reservation unless they are registered.
+          display_menu();
+          printf("|\t    Enter your choice:       \t\t|\n");
+          printf("-------------------------------------------------\n");
+          gotoxy(31,10); scanf("%d", &choice);
+
+        if (choice == 1){
+                register_user();
+                break;
+        }
+        else if (choice == 2){
+                hotel_information();
+        }
+        else if (choice == 5){
+            exit(0);
+        }
+        else{
+           printf("\n\tPlease Login/Register first");
+           getch();
+        }
+        }
+
+  while (choice != 5)
+        {
+          system("cls");
+          display_menu();
+          printf("|\t    Enter your choice:       \t\t|\n");
+          printf("-------------------------------------------------\n");
+          gotoxy(31,10); scanf("%d", &choice);
+
+          switch (choice)
+          {
+            case 1: printf("\tYou are now Logged in/ Registered ");
+                    printf("and can now make a reservation!\n");
+                    getch();
+                    break;
+            case 2: hotel_information(); // WALA PA
+                    break;
+            case 3: printf("Availability:\n"); // WALA PA
+                    hotel_information();
+                    break;
+            case 4: make_reservation(); // KAILANGAN AYUSIN GALING CHATGPT EH AHAHA
+                    break;
+            case 5: printf("\n\tThank you for visiting our site!\n");
+                    break;
+            default: printf("Invalid choice!\n");
+          }
+        }
+
+return 0;
+}
 
 void gotoxy(int x,int y)
 {
@@ -183,6 +207,7 @@ void hotel_information() // HOTEL INFORMATION
     for (int i = 0; i < num_rooms; i++) {
         printf("%d\t%s\t%.2f\t%d/%d\n", rooms[i].id, rooms[i].type, rooms[i].price, rooms[i].available_rooms, rooms[i].total_rooms);
     }
+    getch();
 }
 
 
