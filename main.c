@@ -205,9 +205,9 @@ void hotel_information() // HOTEL INFORMATION
     gotoxy(18, 17);printf("+=========================================================================================+");
     gotoxy(18, 18);printf("|\t Room Type  |\tInformation\t\t\t\t|   Price\t\t    |");
     gotoxy(18, 19);printf("+=========================================================================================+");
-    gotoxy(18, 20);printf("|\t Standard   |\t40Sq-Meter, Table and Queen Bed \t|  1000-3000/12 Hour        |");
-    gotoxy(18, 21);printf("|\t Deluxe     |\t60Sq-M, Sofa, Table, and King Bed \t|  3000-6000/12 Hour        |");
-    gotoxy(18, 22);printf("|\t Suit       |\t2Rooms, 120Sq-M, Sofa and King Bed \t|  6000-1000/12 Hour        |");
+    gotoxy(18, 20);printf("|\t Standard   |\t40Sq-Meter, Table and Queen Bed \t|   3000/12 Hour            |");
+    gotoxy(18, 21);printf("|\t Deluxe     |\t60Sq-M, Sofa, Table, and King Bed \t|   6000/12 Hour            |");
+    gotoxy(18, 22);printf("|\t Suit       |\t2Rooms, 120Sq-M, Sofa and King Bed \t|   1000/12 Hour            |");
     gotoxy(18, 23);printf("+=========================================================================================+");
 
 
@@ -217,6 +217,7 @@ void hotel_information() // HOTEL INFORMATION
 
 void availability() // AVAILABILITY
 {
+    //Dito makikita yung number of rooms na available tsaka date/Pano yung sa date? wahahaha
 
     system("cls");
     printf("Room ID\tType\tPrice\tAvailable Rooms\n");
@@ -275,7 +276,8 @@ int make_reservation() // KAILANGAN AYUSIN GALING CHATGPT EH HAHAHAHA
     save_reservation(reservation);
     printf("\nReservation successful! Total Bill: %.2f\n", reservation.bill);
     display_reservation_details(reservation);
-    sleep(5); // delay
+    getch();
+    //sleep(5); // delay
 }
 
 
