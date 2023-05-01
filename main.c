@@ -4,6 +4,7 @@
 #include <string.h>
 #include <conio.h>
 #include <windows.h>
+#include <time.h>
 
 #define MAX_ROOMS 100
 #define MAX_NAME_LENGTH 50
@@ -232,9 +233,10 @@ void availability() // AVAILABILITY
 int make_reservation() // KAILANGAN AYUSIN GALING CHATGPT EH HAHAHAHA
 {
     printf("\nMAKE A RESERVATION\n");
-
+  //  int random_num;
         // get reservation details
     Reservation reservation;
+    Room room;
     printf("\nDate (MM/DD/YY): ");
     scanf("%s", reservation.date);
 
@@ -271,13 +273,18 @@ int make_reservation() // KAILANGAN AYUSIN GALING CHATGPT EH HAHAHAHA
 
     reservation.bill = price * reservation.room_num;
 
+    srand(time(NULL));
+  //room.id = random_num;
+    room.id = rand() % 100 + 1; // randomizing Room ID number from 1-100
+
 
     // save reservation
     save_reservation(reservation);
     printf("\nReservation successful! Total Bill: %.2f\n", reservation.bill);
-    display_reservation_details(reservation);
+    printf("\nYour Room ID: ", room.id);
+    display_reservation_details(reservation, room);
     getch();
-    //sleep(5); // delay
+    sleep(5); // delay
 }
 
 
@@ -285,14 +292,14 @@ int make_reservation() // KAILANGAN AYUSIN GALING CHATGPT EH HAHAHAHA
 
 
 
-void display_reservation_details(Reservation res)
+void display_reservation_details(Reservation res, Room room)
 {
     printf("Reservation Details\n");
     printf("Name: %s\n", res.name);
     printf("Date: %s\n", res.date);
     printf("Room Type: %s\n", res.type);
-    printf("Room Number: %d\n", res.room_num);
-    printf("Bill: $%.2f\n", res.bill);
+    printf("Room Number: %d\n", room.id);
+    printf("Bill: %.2f\n", res.bill);
 }
 
 
@@ -327,8 +334,9 @@ void retrieve_reservations() // retrieval for reservations
     while (fgets(line, sizeof(line), file))
     {
        Reservation res;
+       Room room;
        sscanf(line, "%s %s %s %d %d %f", res.name, res.date, res.type, &res.room_num, &res.bill);
-       display_reservation_details(res);
+       display_reservation_details(res, room);
     }
      fclose(file);
 }
