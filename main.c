@@ -238,14 +238,6 @@ void availability() // AVAILABILITY
 
 int make_reservation()
 {
-<<<<<<< HEAD
-    printf("\nMAKE A RESERVATION\n");
-  //  int random_num;
-        // get reservation details
-    Reservation reservation;
-    Room room;
-    printf("\nDate (MM/DD/YY): ");
-=======
     system("cls");
 
     gotoxy(35, 4);printf("+============================================+\n");
@@ -259,7 +251,6 @@ int make_reservation()
     scanf("%s", reservation.name);
 
     gotoxy(35, 9);printf("Date (MM/DD/YY): ");
->>>>>>> a69926dc07adfaa094bc8489800f05e554c96dff
     scanf("%s", reservation.date);
 
     gotoxy(35, 10);printf("Room Type (Standard/Deluxe/Suite): ");
@@ -296,19 +287,6 @@ int make_reservation()
     reservation.bill = price * reservation.room_num;
 
     srand(time(NULL));
-<<<<<<< HEAD
-  //room.id = random_num;
-    room.id = rand() % 100 + 1; // randomizing Room ID number from 1-100
-
-
-    // save reservation
-    save_reservation(reservation);
-    printf("\nReservation successful! Total Bill: %.2f\n", reservation.bill);
-    printf("\nYour Room ID: ", room.id);
-    display_reservation_details(reservation, room);
-    getch();
-    sleep(5); // delay
-=======
     room.id = rand() % 100 + 1; // randomizing Reservation ID number from 1-10
 
 
@@ -319,7 +297,6 @@ int make_reservation()
     gotoxy(35, 17);printf("Your Reservation ID is: %d", room.id);
     display_reservation_details(reservation, room);
     getch();
->>>>>>> a69926dc07adfaa094bc8489800f05e554c96dff
 }
 
 
@@ -329,14 +306,6 @@ int make_reservation()
 
 void display_reservation_details(Reservation res, Room room)
 {
-<<<<<<< HEAD
-    printf("Reservation Details\n");
-    printf("Name: %s\n", res.name);
-    printf("Date: %s\n", res.date);
-    printf("Room Type: %s\n", res.type);
-    printf("Room Number: %d\n", room.id);
-    printf("Bill: %.2f\n", res.bill);
-=======
     gotoxy(35, 20);printf("+============================================+\n");
     gotoxy(35, 21);printf("|\t          RESERVATION DETAILS           |\n");
     gotoxy(35, 22);printf("+============================================+\n");
@@ -346,7 +315,6 @@ void display_reservation_details(Reservation res, Room room)
     gotoxy(35, 27);printf("Reservation ID Number: %d\n", room.id);
     gotoxy(35, 28);printf("Bill: %.2f\n", res.bill);
 
->>>>>>> a69926dc07adfaa094bc8489800f05e554c96dff
 }
 
 
@@ -382,11 +350,7 @@ void retrieve_reservations() // retrieval for reservations
     {
        Reservation res;
        Room room;
-<<<<<<< HEAD
-       sscanf(line, "%s %s %s %d %d %f", res.name, res.date, res.type, &res.room_num, &res.bill);
-=======
        sscanf(line, "%s %s %s %d %f %d", res.name, res.date, res.type, &res.room_num, &res.bill, &room.id);
->>>>>>> a69926dc07adfaa094bc8489800f05e554c96dff
        display_reservation_details(res, room);
     }
      fclose(file);
