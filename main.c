@@ -49,16 +49,17 @@ int x, y; //for gotoxy
 
 void display_menu()
 {
-    printf("-------------------------------------------------\n");
-    printf("|\t    Hotel --- Reservation       \t|\n");
-    printf("-------------------------------------------------\n");
-    printf("|\t\t\t\t\t\t|\n");
-    printf("|\t    1. Registration       \t\t|\n");
-    printf("|\t    2. Hotel Information       \t\t|\n");
-    printf("|\t    3. Availability       \t\t|\n");
-    printf("|\t    4. Reservation       \t\t|\n");
-    printf("|\t    5. Exit       \t\t\t|\n");
-    printf("-------------------------------------------------\n");
+    gotoxy(35, 8); printf("+============================================+\n");
+    gotoxy(35, 9);printf("|\t       Hotel Picadili Travels    \t|\n");
+    gotoxy(35, 10);printf("+============================================+\n");
+    gotoxy(35, 11);printf("|\t\t\t\t\t\t|\n");
+    gotoxy(35, 12);printf("|\t    [1] : Registration       \t\t|\n");
+    gotoxy(35, 13);printf("|\t    [2] : Hotel Information     \t|\n");
+    gotoxy(35, 14);printf("|\t    [3] : Availability       \t\t|\n");
+    gotoxy(35, 15);printf("|\t    [4] : Reservation       \t\t|\n");
+    gotoxy(35, 16);printf("|\t    [5] : Exit       \t\t\t|\n");
+    gotoxy(35, 17);printf("|\t\t\t\t\t\t|\n");
+    gotoxy(35, 18);printf("+============================================+\n");
 
 
 }
@@ -72,9 +73,9 @@ int main()
     while (choice != 1){    //Registration or login verification
           system("cls");    //Users cannot make reservation unless they are registered.
           display_menu();
-          printf("|\t    Enter your choice:       \t\t|\n");
-          printf("-------------------------------------------------\n");
-          gotoxy(31,10); scanf("%d", &choice);
+           gotoxy(35, 19);printf("| Enter your choice:       \t\t\t|\n");
+           gotoxy(35, 20);printf("+============================================+\n");
+           gotoxy(56, 19);printf; scanf("%d", &choice);
 
         if (choice == 1){
                 register_user();
@@ -87,7 +88,7 @@ int main()
             exit(0);
         }
         else{
-           printf("\n\tPlease Login/Register first");
+           gotoxy(35, 22); printf("\t  Please Login/Register first");
            getch();
         }
         }
@@ -96,9 +97,9 @@ int main()
         {
           system("cls");
           display_menu();
-          printf("|\t    Enter your choice:       \t\t|\n");
-          printf("-------------------------------------------------\n");
-          gotoxy(31,10); scanf("%d", &choice);
+          gotoxy(35, 19);printf("| Enter your choice:       \t\t\t|\n");
+           gotoxy(35, 20);printf("+============================================+\n");
+           gotoxy(56, 19);printf; scanf("%d", &choice);
 
           switch (choice)
           {
@@ -106,10 +107,10 @@ int main()
                     printf("and can now make a reservation!\n");
                     getch();
                     break;
-            case 2: hotel_information(); // NEED TULONG 
+            case 2: hotel_information(); // DONE
                     break;
-            case 3: printf("Availability:\n"); // WALA PA
-                    hotel_information();
+            case 3: printf("Availability:\n"); // NEED TULONG
+                    availability();
                     break;
             case 4: make_reservation(); // ON-GOING
                     break;
@@ -189,9 +190,36 @@ void save_user(User user)
 
 void hotel_information() // HOTEL INFORMATION
 {
-    printf("\nHOTEL INFORMATION\n");
-    printf("\nThis Hotel serves a 12hours reservation which is Day and Night\n");
+    system("cls");
+     gotoxy(32, 3); printf("+===============================================================+");
+    gotoxy(32, 4);printf("|\t            Hotel Picadili Travels      \t\t|");
+    gotoxy(18, 5);printf("+============+===============================================================+============+");
+    gotoxy(20, 7);printf("Hotel Picadili Travels, is a 15 Storey hotel in a vibrant commercial area.");
+    gotoxy(20, 8);printf("This sleek luxury hotel is 3 km from SM Mall of Asia, and 5 km from both World");
+    gotoxy(20, 9);printf("Trade Center Metro Manila and Ninoy Aquino International Airport. ");
+    gotoxy(20, 11);printf("This Hotel serves a 12hours reservation which is Day and Night");
 
+    gotoxy(20, 13);printf("Amenities: Internet, Gym, Pools, Parking & Transportation, and 24 Hour Bar & Room service\n");
+
+    gotoxy(20, 16);printf("Room Information: ");
+    gotoxy(18, 17);printf("+=========================================================================================+");
+    gotoxy(18, 18);printf("|\t Room Type  |\tInformation\t\t\t\t|   Price\t\t    |");
+    gotoxy(18, 19);printf("+=========================================================================================+");
+    gotoxy(18, 20);printf("|\t Standard   |\t40Sq-Meter, Table and Queen Bed \t|   3000/12 Hour            |");
+    gotoxy(18, 21);printf("|\t Deluxe     |\t60Sq-M, Sofa, Table, and King Bed \t|   6000/12 Hour            |");
+    gotoxy(18, 22);printf("|\t Suit       |\t2Rooms, 120Sq-M, Sofa and King Bed \t|   1000/12 Hour            |");
+    gotoxy(18, 23);printf("+=========================================================================================+");
+
+
+    getch();
+}
+
+
+void availability() // AVAILABILITY
+{
+    //Dito makikita yung number of rooms na available tsaka date/Pano yung sa date? wahahaha
+
+    system("cls");
     printf("Room ID\tType\tPrice\tAvailable Rooms\n");
 
 
@@ -200,7 +228,6 @@ void hotel_information() // HOTEL INFORMATION
     }
     getch();
 }
-
 
 int make_reservation() // KAILANGAN AYUSIN GALING CHATGPT EH HAHAHAHA
 {
@@ -249,7 +276,8 @@ int make_reservation() // KAILANGAN AYUSIN GALING CHATGPT EH HAHAHAHA
     save_reservation(reservation);
     printf("\nReservation successful! Total Bill: %.2f\n", reservation.bill);
     display_reservation_details(reservation);
-    sleep(5); // delay
+    getch();
+    //sleep(5); // delay
 }
 
 
