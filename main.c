@@ -5,7 +5,7 @@
 #include <conio.h>
 #include <windows.h>
 
-#define MAX_ROOMS 100
+#define MAX_ROOMS 10 // reduced for simplicity sake
 #define MAX_NAME_LENGTH 50
 #define MAX_EMAIL_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
@@ -37,6 +37,7 @@ typedef struct
     float price; // price per room (for 12hours)
     int available_rooms;
     int total_rooms;
+    char isReserved[MAX_DATE_LENGTH]; // added for availability, might have to take this into account when saving and retrieving 
 } Room;
 
 Room rooms[MAX_ROOMS];
@@ -218,13 +219,15 @@ void hotel_information() // HOTEL INFORMATION
 void availability() // AVAILABILITY
 {
     //Dito makikita yung number of rooms na available tsaka date/Pano yung sa date? wahahaha
-
+    char availDate[50];
+    printf("Input date( MM/DD/YYYY): ");scanf("%s", availDate); // added for availdate
     system("cls");
     printf("Room ID\tType\tPrice\tAvailable Rooms\n");
 
 
     for (int i = 0; i < num_rooms; i++) {
-        printf("%d\t%s\t%.2f\t%d/%d\n", rooms[i].id, rooms[i].type, rooms[i].price, rooms[i].available_rooms, rooms[i].total_rooms);
+        if (room[i].isReserved != availDate) // comparing the date if it is reserved
+            printf("%d\t%s\t%.2f\t%d/%d\n", rooms[i].id, rooms[i].type, rooms[i].price, rooms[i].available_rooms, rooms[i].total_rooms);
     }
     getch();
 }
