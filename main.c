@@ -132,18 +132,28 @@ return 0;
 
 void register_user()
 {
-    gotoxy(35, 22);printf("\t       REGISTRATION\n");
+    system("cls");
+    gotoxy(32, 3); printf("+===============================================================+");
+    gotoxy(32, 4);printf("|\t            Hotel Picadili Travels      \t\t|");
+    gotoxy(18, 5);printf("+=============+===============================================================+=============+");
     User user;
 
+    gotoxy(45,7); printf("----------------------------------");
+    gotoxy(45,8); printf("       Picadili Registration");
+    gotoxy(45,9); printf("----------------------------------");
+    gotoxy(45,11); printf("Enter username: ");
+    gotoxy(45,12); printf("Enter password: ");
+    gotoxy(45,13); printf("----------------------------------");
+    gotoxy(44,14); printf("|                                  |");
+    gotoxy(45,15); printf("----------------------------------");
+    gotoxy(62,11); scanf("%s", user.email);
 
-    gotoxy(35, 24);printf("Email: ");
-    scanf("%s", user.email);
 
-    gotoxy(35, 25);printf("Password: ");
+
     char password[MAX_PASSWORD_LENGTH + 1];
 
     int i = 0;
-
+    gotoxy(62,12);
     while (1)
     {
         char ch = getch();
@@ -166,10 +176,13 @@ void register_user()
     encrypt_password(password);
     strcpy(user.password, password);
     save_user(user);
-    gotoxy(35, 27);printf("\t       Registration successful!\n");
+    gotoxy(45,14);printf("      Registration successful!\n");
     sleep(3);  // delay
 
 }
+
+
+
 
 
 void encrypt_password(char* password)
@@ -197,13 +210,13 @@ void save_user(User user)
 void hotel_information() // HOTEL INFORMATION
 {
     system("cls");
-     gotoxy(32, 3); printf("+===============================================================+");
+    gotoxy(32, 3); printf("+===============================================================+");
     gotoxy(32, 4);printf("|\t            Hotel Picadili Travels      \t\t|");
     gotoxy(18, 5);printf("+============+===============================================================+============+");
     gotoxy(20, 7);printf("Hotel Picadili Travels, is a 15 Storey hotel in a vibrant commercial area.");
     gotoxy(20, 8);printf("This sleek luxury hotel is 3 km from SM Mall of Asia, and 5 km from both World");
     gotoxy(20, 9);printf("Trade Center Metro Manila and Ninoy Aquino International Airport. ");
-    gotoxy(20, 11);printf("This Hotel serves a 12hours reservation which is Day and Night");
+    gotoxy(20, 11);printf("This Hotel serves a 24 hours reservation.");
 
     gotoxy(20, 13);printf("Amenities: Internet, Gym, Pools, Parking & Transportation, and 24 Hour Bar & Room service\n");
 
@@ -211,9 +224,9 @@ void hotel_information() // HOTEL INFORMATION
     gotoxy(18, 17);printf("+=========================================================================================+");
     gotoxy(18, 18);printf("|\t Room Type  |\tInformation\t\t\t\t|   Price\t\t    |");
     gotoxy(18, 19);printf("+=========================================================================================+");
-    gotoxy(18, 20);printf("|\t Standard   |\t40Sq-Meter, Table and Queen Bed \t|   3000/12 Hour            |");
-    gotoxy(18, 21);printf("|\t Deluxe     |\t60Sq-M, Sofa, Table, and King Bed \t|   6000/12 Hour            |");
-    gotoxy(18, 22);printf("|\t Suit       |\t2Rooms, 120Sq-M, Sofa and King Bed \t|   1000/12 Hour            |");
+    gotoxy(18, 20);printf("|\t Standard   |\t40Sq-Meter, Table and Queen Bed \t|   3000/24 Hour            |");
+    gotoxy(18, 21);printf("|\t Deluxe     |\t60Sq-M, Sofa, Table, and King Bed \t|   6000/24 Hour            |");
+    gotoxy(18, 22);printf("|\t Suit       |\t2Rooms, 120Sq-M, Sofa and King Bed \t|   1000/24 Hour            |");
     gotoxy(18, 23);printf("+=========================================================================================+");
 
 

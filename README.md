@@ -1,2 +1,0 @@
-<<<<<<< HEAD
-# Hotel-Reservation-System
