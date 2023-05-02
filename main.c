@@ -268,17 +268,17 @@ void availability() // AVAILABILITY
     for (int i = 0; i < MAX_ROOMS; i++) // I changed this from num_rooms to MAX_ROOMS, this was the main reason why it won't print more than one
     {
        // printf("%s (to show how many rooms)\n", rooms[i].type); //  This is the debugging thing
-        if (strcmp(rooms[i].type, type) == 0)
+        if (strcmp(reservation_file, type) == 0)
         {
-            if (strcmp(rooms[i].isReserved, date) != 0)
+            if (strcmp(reservation_file, date) != 0)
             {
                 available_rooms++;
-            }
+               }
         }
     }
 
     if (available_rooms == 0)
-        printf("\n\t\t\tThere are no available rooms of type %s on the requested date.\n", type);
+        printf("\n\t\t\tThere are no available rooms of type %s on the requested date %s\n", type,date);
     else
         printf("\n\t\t\t%d Rooms is/are available for type %s.\n", available_rooms, type);
     getch();
