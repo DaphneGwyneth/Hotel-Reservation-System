@@ -137,12 +137,12 @@ void register_user()
     gotoxy(32, 4);printf("|\t            Hotel Picadili Travels      \t\t|");
     gotoxy(18, 5);printf("+=============+===============================================================+=============+");
     User user;
-
+    Room room;
     gotoxy(45,7); printf("----------------------------------");
     gotoxy(45,8); printf("       Picadili Registration");
     gotoxy(45,9); printf("----------------------------------");
-    gotoxy(45,11); printf("Enter username: ");
-    gotoxy(45,12); printf("Enter password: ");
+    gotoxy(45,11); printf("Enter Email: ");
+    gotoxy(45,12); printf("Enter Password: ");
     gotoxy(45,13); printf("----------------------------------");
     gotoxy(44,14); printf("|                                  |");
     gotoxy(45,15); printf("----------------------------------");
@@ -175,9 +175,9 @@ void register_user()
     password[i] = '\0';
     encrypt_password(password);
     strcpy(user.password, password);
-    save_user(user);
+    save_user(user,room);
     gotoxy(45,14);printf("      Registration successful!\n");
-    sleep(3);  // delay
+    sleep(2);  // delay
 
 }
 
@@ -195,14 +195,14 @@ void encrypt_password(char* password)
     }
 }
 
-void save_user(User user)
+void save_user(User user, Room room)
 {
     char filename[MAX_NAME_LENGTH + 5];
 
     sprintf(filename, "%s.txt", user.email); // makes multiple txt file for new user using their email
 
     FILE* fp = fopen(filename, "w");
-    fprintf(fp, "%s,%s,%d\n", user.email, user.password, user.num_reservations);
+    fprintf(fp, "%s, %s, %d\n", user.email, user.password, room.id);
     fclose(fp);
 }
 
@@ -224,9 +224,9 @@ void hotel_information() // HOTEL INFORMATION
     gotoxy(18, 17);printf("+=========================================================================================+");
     gotoxy(18, 18);printf("|\t Room Type  |\tInformation\t\t\t\t|   Price\t\t    |");
     gotoxy(18, 19);printf("+=========================================================================================+");
-    gotoxy(18, 20);printf("|\t Standard   |\t40Sq-Meter, Table and Queen Bed \t|   3000/24 Hour            |");
-    gotoxy(18, 21);printf("|\t Deluxe     |\t60Sq-M, Sofa, Table, and King Bed \t|   6000/24 Hour            |");
-    gotoxy(18, 22);printf("|\t Suit       |\t2Rooms, 120Sq-M, Sofa and King Bed \t|   1000/24 Hour            |");
+    gotoxy(18, 20);printf("|\t Standard   |\t40Sq-Meter, Table and Queen Bed \t|   3000/24 Hours           |");
+    gotoxy(18, 21);printf("|\t Deluxe     |\t60Sq-M, Sofa, Table, and King Bed \t|   6000/24 Hours           |");
+    gotoxy(18, 22);printf("|\t Suite      |\t2Rooms, 120Sq-M, Sofa and King Bed \t|  10000/24 Hours           |");
     gotoxy(18, 23);printf("+=========================================================================================+");
 
 
@@ -240,36 +240,44 @@ void availability() // AVAILABILITY
     gotoxy(35, 12);printf("Input date( MM/DD/YY): ");scanf("%s", availDate); // added for availdate
     gotoxy(35, 14);printf("Room ID\tType\tPrice\tAvailable Rooms\n");
 
+    int flag = 0; // flag to keep track of availability
 
     for (int i = 0; i < num_rooms; i++) {
-        if (rooms[i].isReserved != availDate) // comparing the date if it is reserved
+        if (strcmp(rooms[i].isReserved, availDate) != 0) { // comparing the date if it is reserved
             gotoxy(35, 15);printf("%d\t%s\t%.2f\t%d/%d\n", rooms[i].id, rooms[i].type, rooms[i].price, rooms[i].available_rooms, rooms[i].total_rooms);
+            flag = 1; // set flag if a room is available
+        }
     }
-    getch();
 
+    if (flag == 0) { // if no rooms are available
+        gotoxy(35, 15);printf("No rooms available on %s\n", availDate);
+    }
+
+    getch();
 }
+
 
 int make_reservation()
 {
     system("cls");
 
-    gotoxy(35, 4);printf("+============================================+\n");
-    gotoxy(35, 5);printf("|\t          MAKE A RESERVATION            |\n");
-    gotoxy(35, 6);printf("+============================================+\n");
+    gotoxy(35, 1);printf("+============================================+\n");
+    gotoxy(35, 2);printf("|\t          MAKE A RESERVATION            |\n");
+    gotoxy(35, 3);printf("+============================================+\n");
 
     Reservation reservation;
     Room room;
 
-    gotoxy(35, 8);printf("Name: ");
+    gotoxy(35, 5);printf("Name: ");
     scanf("%s", reservation.name);
 
-    gotoxy(35, 9);printf("Date (MM/DD/YY): ");
+    gotoxy(35, 6);printf("Date (MM/DD/YY): ");
     scanf("%s", reservation.date);
 
-    gotoxy(35, 10);printf("Room Type (Standard/Deluxe/Suite): ");
+    gotoxy(35, 7);printf("Room Type (Standard/Deluxe/Suite): ");
     scanf("%s", reservation.type);
 
-    gotoxy(35, 11);printf("Number of Rooms: ");
+    gotoxy(35, 8);printf("Number of Rooms: ");
     scanf("%d", &reservation.room_num);
 
 
@@ -278,21 +286,21 @@ int make_reservation()
     float price;
     if (strcmp(reservation.type, "Standard") == 0)
         {
-        gotoxy(35, 12);price = 3000.0;
+        gotoxy(35, 9);price = 3000.0;
         printf("Standard = 3,000");
         }
     else if (strcmp(reservation.type, "Deluxe") == 0)
         {
         price = 6000.0;
-        gotoxy(35, 12);printf("Deluxe = 6,000");
+        gotoxy(35, 9);printf("Deluxe = 6,000");
         }
     else if (strcmp(reservation.type, "Suite") == 0)
         {
         price = 10000.0;
-        gotoxy(35, 12);printf("Suite = 10,000");
+        gotoxy(35, 9);printf("Suite = 10,000");
         }
     else{
-        gotoxy(35, 13);printf("\t       Invalid room type. Please try again.\n");
+        gotoxy(35, 10);printf("\t       Invalid room type. Please try again.\n");
         sleep(2); // delay
         return;
     }
@@ -300,14 +308,14 @@ int make_reservation()
     reservation.bill = price * reservation.room_num;
 
     srand(time(NULL));
-    room.id = rand() % 100 + 1; // randomizing Reservation ID number from 1-10
+    room.id = rand() % 100 + 1; // randomizing Reservation ID number from 1-100
 
 
     // save reservation
     save_reservation(reservation, room);
-    gotoxy(35, 14);printf("\t       Reservation successful!");
-    gotoxy(35, 16);printf("Total Bill: %.2f\n", reservation.bill);
-    gotoxy(35, 17);printf("Your Reservation ID is: %d", room.id);
+    gotoxy(35, 11);printf("\t       Reservation successful!");
+   // gotoxy(35, 13);printf("Total Bill: %.2f\n", reservation.bill);
+   // gotoxy(35, 14);printf("Your Reservation ID is: %d", room.id);
     display_reservation_details(reservation, room);
     getch();
 }
@@ -319,15 +327,18 @@ int make_reservation()
 
 void display_reservation_details(Reservation res, Room room)
 {
-    gotoxy(35, 20);printf("+============================================+\n");
-    gotoxy(35, 21);printf("|\t          RESERVATION DETAILS           |\n");
-    gotoxy(35, 22);printf("+============================================+\n");
-    gotoxy(35, 24);printf("Name: %s\n", res.name);
-    gotoxy(35, 25);printf("Date: %s\n", res.date);
-    gotoxy(35, 26);printf("Room Type: %s\n", res.type);
-    gotoxy(35, 27);printf("Reservation ID Number: %d\n", room.id);
-    gotoxy(35, 28);printf("Bill: %.2f\n", res.bill);
-
+    gotoxy(35, 14);printf("+============================================+\n");
+    gotoxy(35, 15);printf("|\t          RESERVATION DETAILS           |\n");
+    gotoxy(35, 16);printf("+============================================+\n");
+    gotoxy(35, 17);printf("| Room Type |   Date   | No. of Rooms| Price |");
+    gotoxy(35, 18);printf("|--------------------------------------------|");
+    gotoxy(35, 19);printf("| %8s  | %s | %11d | %2.0f  |", res.type,res.date,res.room_num,res.bill);
+    gotoxy(35, 20);printf("|--------------------------------------------|");
+    gotoxy(35, 21);printf("| Total Bill:                      %.2f   |",res.bill);
+    gotoxy(35, 22);printf("+--------------------------------------------+");
+    gotoxy(35, 23);printf("Reservation ID Number: %d",room.id);
+    gotoxy(35, 25);printf("\t    Your reservation is complete.");
+    gotoxy(35, 26);printf("\t    Get ready to relax and unwind!");
 }
 
 
@@ -382,4 +393,3 @@ void gotoxy(int x,int y)
     coord.Y=y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coord);
 }
-
