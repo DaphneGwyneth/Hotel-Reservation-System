@@ -66,11 +66,28 @@ void display_menu()
 
 }
 
+void init() // to initialize which rooms are which
+{
+    int ab = 0;
+    char aab[MAX_DATE_LENGTH] = "N/A";
+    while(ab <= MAX_ROOMS)
+    {
+        if (ab <= 2)
+            strcpy(rooms[ab].type,"Suite");
+        else if (ab <= 5)
+            strcpy(rooms[ab].type,"Deluxe");
+        else
+            strcpy(rooms[ab].type,"Standard");
+        ab++;
+    }
+}
 
 int main()
 {
+    init(); // initialize rooms
     retrieve_data(); // for retrieval
     int choice = 0;
+
 
     while (choice != 1){    //Registration or login verification
           system("cls");    //Users cannot make reservation unless they are registered.
@@ -236,24 +253,35 @@ void hotel_information() // HOTEL INFORMATION
 
 void availability() // AVAILABILITY
 {
-    char availDate[50];
-    gotoxy(35, 12);printf("Input date( MM/DD/YY): ");scanf("%s", availDate); // added for availdate
-    gotoxy(35, 14);printf("Room ID\tType\tPrice\tAvailable Rooms\n");
 
-    int flag = 0; // flag to keep track of availability
+    char date[MAX_DATE_LENGTH];
+    char type[MAX_TYPE_LENGTH];
+    int available_rooms = 0;
 
-    for (int i = 0; i < num_rooms; i++) {
-        if (strcmp(rooms[i].isReserved, availDate) != 0) { // comparing the date if it is reserved
-            gotoxy(35, 15);printf("%d\t%s\t%.2f\t%d/%d\n", rooms[i].id, rooms[i].type, rooms[i].price, rooms[i].available_rooms, rooms[i].total_rooms);
-            flag = 1; // set flag if a room is available
+    printf("\n\t\t\tEnter the desired date (MM/DD/YY): ");
+    scanf("%s", date);
+
+    printf("\t\t\tEnter the desired room type (Standard/Deluxe/Suite): ");
+    scanf("%s", type);
+
+    // Check availability for each room
+    for (int i = 0; i < MAX_ROOMS; i++) // I changed this from num_rooms to MAX_ROOMS, this was the main reason why it won't print more than one
+    {
+       // printf("%s (to show how many rooms)\n", rooms[i].type); //  This is the debugging thing
+        if (strcmp(rooms[i].type, type) == 0)
+        {
+            if (strcmp(rooms[i].isReserved, date) != 0)
+            {
+                available_rooms++;
+            }
         }
     }
 
-    if (flag == 0) { // if no rooms are available
-        gotoxy(35, 15);printf("No rooms available on %s\n", availDate);
-    }
-
-    getch();
+    if (available_rooms == 0)
+        printf("\n\t\t\tThere are no available rooms of type %s on the requested date.\n", type);
+    else
+        printf("\n\t\t\t%d Rooms is/are available for type %s.\n", available_rooms, type);
+    system("pause");
 }
 
 
