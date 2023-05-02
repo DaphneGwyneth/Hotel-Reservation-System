@@ -281,7 +281,7 @@ void availability() // AVAILABILITY
         printf("\n\t\t\tThere are no available rooms of type %s on the requested date.\n", type);
     else
         printf("\n\t\t\t%d Rooms is/are available for type %s.\n", available_rooms, type);
-    system("pause");
+    getch();
 }
 
 
@@ -342,8 +342,6 @@ int make_reservation()
     // save reservation
     save_reservation(reservation, room);
     gotoxy(35, 11);printf("\t       Reservation successful!");
-   // gotoxy(35, 13);printf("Total Bill: %.2f\n", reservation.bill);
-   // gotoxy(35, 14);printf("Your Reservation ID is: %d", room.id);
     display_reservation_details(reservation, room);
     getch();
 }
@@ -364,7 +362,7 @@ void display_reservation_details(Reservation res, Room room)
     gotoxy(35, 20);printf("|--------------------------------------------|");
     gotoxy(35, 21);printf("| Total Bill:                      %.2f   |",res.bill);
     gotoxy(35, 22);printf("+--------------------------------------------+");
-    gotoxy(35, 23);printf("Reservation ID Number: %d",room.id);
+    gotoxy(35, 23);printf("Reservation Room ID: %d",room.id);
     gotoxy(35, 25);printf("\t    Your reservation is complete.");
     gotoxy(35, 26);printf("\t    Get ready to relax and unwind!");
 }
