@@ -39,9 +39,8 @@ typedef struct
 {
     int id; // for making of the room number ID
     char type[MAX_TYPE_LENGTH]; // for room types (standard,deluxe,suite)
-    float price; // price per room (for 12hours)
+    float price; // price per room (for 24hours)
     int available_rooms;
-    int total_rooms;
     char isReserved[MAX_DATE_LENGTH]; // added for availability, might have to take this into account when saving and retrieving
 } Room;
 
@@ -427,7 +426,7 @@ void display_reservation_details(Reservation res, Room room)
 void save_reservation(Reservation res, Room room) // saves in the reservations.txt
 {
     FILE* file = fopen(reservation_file, "a"); // a = append
-    fprintf(file, "%s %s %s %d %d %f %d\n", res.name, res.date, res.type, res.room_num, res.bill, room.id);
+    fprintf(file, "%s %s %s %d %.0f %d\n", res.name, res.date, res.type, res.room_num, res.bill, room.id);
     fclose(file);
 }
 
@@ -465,7 +464,7 @@ void retrieve_reservations() // retrieval for reservations
     {
        Reservation res;
        Room room;
-       sscanf(line, "%s %s %s %d %f %d", res.name, res.date, res.type, &res.room_num, &res.bill, &room.id);
+       sscanf(line, "%s %s %s %d %.0f %d", res.name, res.date, res.type, &res.room_num, &res.bill, &room.id);
        display_reservation_details(res, room);
     }
      fclose(file);
