@@ -69,9 +69,10 @@ void display_menu()
 void init() // to initialize which rooms are which
 {
     int ab = 0;
-    char aab[MAX_DATE_LENGTH] = "N/A";
+    char aab[MAX_DATE_LENGTH] = "NA/NA/NA";
     while(ab <= MAX_ROOMS)
     {
+        strcpy(rooms[ab].isReserved, aab);
         if (ab <= 2)
             strcpy(rooms[ab].type,"Suite");
         else if (ab <= 5)
@@ -260,7 +261,6 @@ void availability() // AVAILABILITY
 
     printf("\n\t\t\tEnter the desired date (MM/DD/YY): ");
     scanf("%s", date);
-
     printf("\t\t\tEnter the desired room type (Standard/Deluxe/Suite): ");
     scanf("%s", type);
 
@@ -268,9 +268,9 @@ void availability() // AVAILABILITY
     for (int i = 0; i < MAX_ROOMS; i++) // I changed this from num_rooms to MAX_ROOMS, this was the main reason why it won't print more than one
     {
        // printf("%s (to show how many rooms)\n", rooms[i].type); //  This is the debugging thing
-        if (strcmp(reservation_file, type) == 0)
+        if (strcmp(rooms[i].type, type) == 0)
         {
-            if (strcmp(reservation_file, date) != 0)
+            if (strcmp(rooms[i].isReserved, date) != 0)
             {
                 available_rooms++;
                }
