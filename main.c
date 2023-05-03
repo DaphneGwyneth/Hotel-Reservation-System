@@ -71,8 +71,8 @@ void display_menu()
 
 }
 
-<<<<<<< HEAD
-void init() // to initialize which rooms are which
+
+void init_rooms() // to initialize which rooms are which
 {
     int ab = 0;
     char aab[MAX_DATE_LENGTH] = "NA/NA/NA";
@@ -88,9 +88,7 @@ void init() // to initialize which rooms are which
         ab++;
     }
 }
-=======
 
->>>>>>> 927e64c7e7253417c7b77853fa7068e4202e2ca9
 
 int main()
 {
@@ -133,7 +131,7 @@ int main()
 
           switch (choice)
           {
-            case 1: printf("\tYou are now Logged in/ Registered ");
+            case 1:gotoxy(33, 22);printf("\tYou are now Logged in/ Registered ");
                     printf("and can now make a reservation!\n");
                     getch();
                     break;
@@ -164,23 +162,6 @@ void init()
  init_rooms();
 }
 
-void init_rooms(){
-   void init() // to initialize which rooms are which
-{
-    int ab = 0;
-    char aab[MAX_DATE_LENGTH] = "N/A";
-    while(ab <= MAX_ROOMS)
-    {
-        if (ab <= 2)
-            strcpy(rooms[ab].type,"Suite");
-        else if (ab <= 5)
-            strcpy(rooms[ab].type,"Deluxe");
-        else
-            strcpy(rooms[ab].type,"Standard");
-        ab++;
-    }
-}
-}
 
 
 void register_user(User *a)     //DONE
@@ -199,7 +180,9 @@ void register_user(User *a)     //DONE
     gotoxy(45,13); printf("----------------------------------");
     gotoxy(44,14); printf("|                                  |");
     gotoxy(45,15); printf("----------------------------------");
-    gotoxy(62,11); scanf("%s", &eme[31]);
+    gotoxy(62,11); scanf("%s", &eme);
+
+   // printf("%s", eme); getch();
 
     int i = 0;
     gotoxy(62,12);
@@ -223,30 +206,37 @@ void register_user(User *a)     //DONE
     }
     password[i] = '\0';
 
-    if (authentication(eme[31], password) == 1)
+    if (authentication(eme, password) == 1)
     {
-        gotoxy(45,14);printf("  Login Successfuly!");
+        gotoxy(45,14);printf("      Login Successful!"); sleep(2);
     }
-    else if (authentication(eme[31], password) == 0)
+    else if (authentication(eme, password) == 0)
     {
-         strcpy(a->email, &eme[31]);
+         strcpy(a->email, &eme);
+         encrypt_password(password, 0xFACA);
          strcpy(a->pass, &password);
-         encrypt_password(password);
-         printf("%s", password); getch();
-         addAccount(b);
+         addAccount(a);
+
+      /*    for (int i = 0; i <= marker; i++)
+        {
+                      encrypt_password(password, 0xFACA);
+                      printf("%s", password);
+        }
+        getch();*/
+
          save_user();
-            gotoxy(45,14);printf("      Registration successful!\n");
+            gotoxy(45,14);printf("      Registration Successful!\n");
     sleep(2);  // delay
 
     }
 }
 
 
-int authentication(char x[31], char *y)
+int authentication(char *x, char *y)
 {
     for (i = 0; i <= marker; i++)
     {
-        if (strcmp(x[31], lg[i].email) == 0 && strcmp(y, lg[i].pass) == 0)
+        if (strcmp(x, lg[i].email) == 0 && strcmp(y, lg[i].pass) == 0)
         {
             return 1;
         }
@@ -275,16 +265,22 @@ else
 }
 
 
-void encrypt_password(char* password)
+void encrypt_password(char password[], int key)
 {
     int i;
-
-    for (i = 0; password[i] != '\0'; i++)
-    {
-     password[i] = password[i] + 0; // saves password in txt file (decrypted)
+    for (i = 0;i<strlen(password); i++){
+     password[i] = password[i] - key; // saves password in txt file (decrypted)
     }
 }
 
+
+void decrypt_password(char password[], int key)
+{
+    int i;
+    for (i = 0;i<strlen(password); i++){
+     password[i] = password[i] + key; // saves password in txt file (decrypted)
+    }
+}
 
 
 void hotel_information() // HOTEL INFORMATION
@@ -440,7 +436,7 @@ void save_reservation(Reservation res, Room room) // saves in the reservations.t
 
 void save_user(){
  FILE *fp;
-    //int i;
+
     fp = fopen("UsersAcc.txt", "w+");
 
     if (fp == NULL)
@@ -514,7 +510,9 @@ void retrieve_user()
         while (!feof(fp))
         {
             fscanf(fp, "%s %s \n",&c.email,&c.pass);
+             decrypt_password(c.pass, 0xFACA);
             addAccount(c);
+           //  printf("%s %s \n",lg[0].email, lg[0].pass); getch();
 
         }
         fclose(fp);
