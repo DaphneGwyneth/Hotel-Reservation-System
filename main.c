@@ -340,6 +340,24 @@ void availability() // AVAILABILITY
     getch();
 }
 
+void room_Update(char newDate[MAX_DATE_LENGTH], char newType[MAX_TYPE_LENGTH], int roomAmount) // room update for availability
+{
+    int roomFlag = 0;
+    char aab[MAX_DATE_LENGTH] = "NA/NA/NA";
+    for (int i = 0; i < MAX_ROOMS; i++)
+    {
+        if (strcmp(rooms[i].type, newType) == 0)
+        {
+            if (strcmp(rooms[i].isReserved, aab) == 0)
+            {
+                strcpy(rooms[i].isReserved, newDate);
+                roomFlag++;
+                if(roomFlag == roomAmount)
+                    i = MAX_ROOMS;
+            }
+        }
+    }
+}
 
 int make_reservation()
 {
@@ -428,6 +446,7 @@ void save_reservation(Reservation res, Room room) // saves in the reservations.t
     FILE* file = fopen(reservation_file, "a"); // a = append
     fprintf(file, "%s %s %s %d %.0f %d\n", res.name, res.date, res.type, res.room_num, res.bill, room.id);
     fclose(file);
+    room_Update(res.date, res.type, res.room_num); // room update for availability
 }
 
 
@@ -466,6 +485,7 @@ void retrieve_reservations() // retrieval for reservations
        Room room;
        sscanf(line, "%s %s %s %d %.0f %d", res.name, res.date, res.type, &res.room_num, &res.bill, &room.id);
        display_reservation_details(res, room);
+       room_Update(res.date, res.type, res.room_num); // room update for availability
     }
      fclose(file);
 }
