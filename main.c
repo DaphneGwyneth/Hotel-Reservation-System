@@ -49,7 +49,6 @@ Room rooms[MAX_ROOMS];
 int num_rooms = 0;
 int num_reservations = 0;
 char reservation_file[] = "reservations.txt";
-char room_file[] = "rooms.txt";
 int x, y, marker, i, counter; //for gotoxy
 
 
@@ -457,20 +456,6 @@ void save_user(){
 }
 
 
-void retrieve_rooms() // retrieval for available rooms
-{
-    FILE* file = fopen(room_file, "r");
-    char line[MAX_TYPE_LENGTH + 2];
-    while (fgets(line, sizeof(line), file))
-    {
-        Room room;
-        sscanf(line, "%d %s %f %d %d", &room.id, room.type, &room.price, &room.available_rooms, &room.total_rooms);
-        rooms[num_rooms] = room;
-        num_rooms++;
-    }
-    fclose(file);
-}
-
 void retrieve_reservations() // retrieval for reservations
 {
     FILE* file = fopen(reservation_file, "r");
@@ -489,7 +474,6 @@ void retrieve_reservations() // retrieval for reservations
 void retrieve_data() // retrieval
 {
     retrieve_user();
-    retrieve_rooms();
     retrieve_reservations();
 }
 
