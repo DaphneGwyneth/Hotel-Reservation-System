@@ -6,10 +6,11 @@
 #include <windows.h>
 #include <time.h>
 
+#define MAX 30// number of user
 #define MAX_ROOMS 10 // reduced for simplicity sake
 #define MAX_NAME_LENGTH 50
-#define MAX_EMAIL_LENGTH 50
-#define MAX_PASSWORD_LENGTH 50
+#define MAX_EMAIL_LENGTH 31
+#define MAX_PASSWORD_LENGTH 31
 #define MAX_DATE_LENGTH 10
 #define MAX_TYPE_LENGTH 10
 
@@ -23,13 +24,16 @@ typedef struct
     float bill;
 } Reservation;
 
+
 typedef struct
 {
     char email[MAX_EMAIL_LENGTH];
-    char password[MAX_PASSWORD_LENGTH];
-    Reservation reservations[MAX_ROOMS];
+    char pass[MAX_PASSWORD_LENGTH];
     int num_reservations;
+    Reservation reservations[MAX_ROOMS];
 } User;
+
+User lg[30];
 
 typedef struct
 {
@@ -46,7 +50,8 @@ int num_rooms = 0;
 int num_reservations = 0;
 char reservation_file[] = "reservations.txt";
 char room_file[] = "rooms.txt";
-int x, y; //for gotoxy
+int x, y, marker, i, counter; //for gotoxy
+
 
 
 void display_menu()
@@ -66,6 +71,7 @@ void display_menu()
 
 }
 
+<<<<<<< HEAD
 void init() // to initialize which rooms are which
 {
     int ab = 0;
@@ -82,11 +88,15 @@ void init() // to initialize which rooms are which
         ab++;
     }
 }
+=======
+
+>>>>>>> 927e64c7e7253417c7b77853fa7068e4202e2ca9
 
 int main()
 {
-    init(); // initialize rooms
-    retrieve_data(); // for retrieval
+    init(); // initialize
+    retrieve_data();// for retrieval
+    User a;
     int choice = 0;
 
 
@@ -98,7 +108,7 @@ int main()
            gotoxy(56, 19);printf; scanf("%d", &choice);
 
         if (choice == 1){
-                register_user();
+                register_user(&a);
                 break;
         }
         else if (choice == 2){
@@ -148,14 +158,39 @@ return 0;
 }
 
 
-void register_user()
+void init()
 {
+ marker = -1;
+ init_rooms();
+}
+
+void init_rooms(){
+   void init() // to initialize which rooms are which
+{
+    int ab = 0;
+    char aab[MAX_DATE_LENGTH] = "N/A";
+    while(ab <= MAX_ROOMS)
+    {
+        if (ab <= 2)
+            strcpy(rooms[ab].type,"Suite");
+        else if (ab <= 5)
+            strcpy(rooms[ab].type,"Deluxe");
+        else
+            strcpy(rooms[ab].type,"Standard");
+        ab++;
+    }
+}
+}
+
+
+void register_user(User *a)     //DONE
+{
+    User b;
+    char eme[31], password[31];
     system("cls");
     gotoxy(32, 3); printf("+===============================================================+");
     gotoxy(32, 4);printf("|\t            Hotel Picadili Travels      \t\t|");
     gotoxy(18, 5);printf("+=============+===============================================================+=============+");
-    User user;
-    Room room;
     gotoxy(45,7); printf("----------------------------------");
     gotoxy(45,8); printf("       Picadili Registration");
     gotoxy(45,9); printf("----------------------------------");
@@ -164,11 +199,7 @@ void register_user()
     gotoxy(45,13); printf("----------------------------------");
     gotoxy(44,14); printf("|                                  |");
     gotoxy(45,15); printf("----------------------------------");
-    gotoxy(62,11); scanf("%s", user.email);
-
-
-
-    char password[MAX_PASSWORD_LENGTH + 1];
+    gotoxy(62,11); scanf("%s", &eme[31]);
 
     int i = 0;
     gotoxy(62,12);
@@ -191,16 +222,57 @@ void register_user()
         }
     }
     password[i] = '\0';
-    encrypt_password(password);
-    strcpy(user.password, password);
-    save_user(user,room);
-    gotoxy(45,14);printf("      Registration successful!\n");
+
+    if (authentication(eme[31], password) == 1)
+    {
+        gotoxy(45,14);printf("  Login Successfuly!");
+    }
+    else if (authentication(eme[31], password) == 0)
+    {
+         strcpy(a->email, &eme[31]);
+         strcpy(a->pass, &password);
+         encrypt_password(password);
+         printf("%s", password); getch();
+         addAccount(b);
+         save_user();
+            gotoxy(45,14);printf("      Registration successful!\n");
     sleep(2);  // delay
+
+    }
+}
+
+
+int authentication(char x[31], char *y)
+{
+    for (i = 0; i <= marker; i++)
+    {
+        if (strcmp(x[31], lg[i].email) == 0 && strcmp(y, lg[i].pass) == 0)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+
+void addAccount(User a)
+{
+    marker++;
+    lg[marker] = a;
 
 }
 
 
 
+int isFull()
+{
+if (marker==MAX-1)
+    return 1;
+else
+    return 0;
+//return(marker==MAX-1);
+}
 
 
 void encrypt_password(char* password)
@@ -213,16 +285,6 @@ void encrypt_password(char* password)
     }
 }
 
-void save_user(User user, Room room)
-{
-    char filename[MAX_NAME_LENGTH + 5];
-
-    sprintf(filename, "%s.txt", user.email); // makes multiple txt file for new user using their email
-
-    FILE* fp = fopen(filename, "w");
-    fprintf(fp, "%s, %s, %d\n", user.email, user.password, room.id);
-    fclose(fp);
-}
 
 
 void hotel_information() // HOTEL INFORMATION
@@ -349,8 +411,6 @@ int make_reservation()
 
 
 
-
-
 void display_reservation_details(Reservation res, Room room)
 {
     gotoxy(35, 14);printf("+============================================+\n");
@@ -374,6 +434,30 @@ void save_reservation(Reservation res, Room room) // saves in the reservations.t
     FILE* file = fopen(reservation_file, "a"); // a = append
     fprintf(file, "%s %s %s %d %d %f %d\n", res.name, res.date, res.type, res.room_num, res.bill, room.id);
     fclose(file);
+}
+
+
+
+void save_user(){
+ FILE *fp;
+    //int i;
+    fp = fopen("UsersAcc.txt", "w+");
+
+    if (fp == NULL)
+    {
+        printf("File not found");
+        system("pause");
+    }
+
+    else
+    {
+        for (int i = 0; i <= marker; i++)
+        {
+            fprintf(fp, "%s\t %s\t\n",lg[i].email,lg[i].pass);
+        }
+        fclose(fp);
+    }
+
 }
 
 
@@ -408,9 +492,37 @@ void retrieve_reservations() // retrieval for reservations
 
 void retrieve_data() // retrieval
 {
+    retrieve_user();
     retrieve_rooms();
     retrieve_reservations();
 }
+
+
+
+void retrieve_user()
+{
+    FILE *fp;
+    User c;
+
+    fp = fopen("UsersAcc.txt", "r+");
+    if (fp == NULL)
+    {
+        gotoxy(45, 25); printf("Press any key to continue."); getch();
+    }
+    else
+    {
+        while (!feof(fp))
+        {
+            fscanf(fp, "%s %s \n",&c.email,&c.pass);
+            addAccount(c);
+
+        }
+        fclose(fp);
+    }
+}
+
+
+
 
 void gotoxy(int x,int y)
 {
