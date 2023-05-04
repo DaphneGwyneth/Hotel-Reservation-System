@@ -15,6 +15,12 @@
 #define MAX_TYPE_LENGTH 10
 
 
+void delay(unsigned int mseconds)
+{
+    clock_t goal = mseconds + clock();
+    while(goal > clock());
+}
+
 typedef struct
 {
     char name[MAX_NAME_LENGTH];
@@ -48,7 +54,7 @@ Room rooms[MAX_ROOMS];
 int num_rooms = 0;
 int num_reservations = 0;
 char reservation_file[] = "reservations.txt";
-int x, y, marker, i, counter; //for gotoxy
+int x, y, marker, i, counter, z; //for gotoxy
 
 
 
@@ -158,6 +164,18 @@ void init()
 {
  marker = -1;
  init_rooms();
+}
+
+
+void welcome(){
+    system("color B0");
+    gotoxy(27, 10); printf("+===================================================================+");
+    gotoxy(25, 11);printf("||\t\t                                                \t||");
+    gotoxy(25, 12);printf("||\t\t               Welcome to                       \t||");
+    gotoxy(25, 13);printf("||\t\t          Hotel Picadili Travels                \t||");
+    gotoxy(25, 14);printf("||\t\t                                                \t||");
+    gotoxy(27, 15);printf("+===================================================================+");
+    startButton();
 }
 
 
@@ -441,6 +459,39 @@ void display_reservation_details(Reservation res, Room room)
 
 
 
+void startButton(){
+    delay(250);
+    for(x = 0; x < 3; x++){
+        gotoxy(43, 17 + x);
+        for(y = 0; y < 3; y++){
+            gotoxy(43, 17 + y);
+            if(x == 0){
+                for(z = 0; z < 33; z++){
+                    delay(3);
+                    printf("%c", 178);
+                }
+            }
+            else if(x == 1){
+                for(z = 0; z < 33; z++){
+                    delay(2);
+                    printf("%c", 177);
+                }
+            }
+            else{
+                for(z = 0; z < 33; z++){
+                    delay(2);
+                    printf("%c", 176);
+                }
+            }
+        }
+    }
+    gotoxy(45, 18);
+    printf("%c PRESS ANY KEY TO CONTINUE %c", 176, 176);
+    getch();
+}
+
+
+
 void save_reservation(Reservation res, Room room) // saves in the reservations.txt
 {
     FILE* file = fopen(reservation_file, "a"); // a = append
@@ -506,10 +557,11 @@ void retrieve_user()
     fp = fopen("UsersAcc.txt", "r+");
     if (fp == NULL)
     {
-        gotoxy(45, 25); printf("Press any key to continue."); getch();
+       welcome(); //gotoxy(45, 25); printf("Press any key to continue."); getch();
     }
     else
     {
+        welcome();
         while (!feof(fp))
         {
             fscanf(fp, "%s %s \n",&c.email,&c.pass);
