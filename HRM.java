@@ -123,7 +123,56 @@ public class HRM {
 		System.out.println("|\t\t\t\t\t\t|");
 		System.out.println("+===============================================+");
 	}
-	
+
+	static void availability() // AVAILABILITY
+	{
+		Scanner scan = new Scanner(System.in);
+		String newDate;
+		String newType;
+		int available_rooms = 0;
+
+		System.out.println("\n\t\t\tEnter the desired date (MM/DD/YY): ");
+		newDate = scan.nextLine();
+		System.out.println("\t\t\tEnter the desired room type (Standard/Deluxe/Suite): ");
+		newType = scan.nextLine();
+
+		// Check availability for each room
+		for (int i = 0; i < MAX_ROOMS; i++) // I changed this from num_rooms to MAX_ROOMS, this was the main reason why it won't print more than one
+		{
+			// printf("%s (to show how many rooms)\n", rooms[i].type); //  This is the debugging thing
+			if (rooms[i].type == newType)
+			{
+				if (rooms[i].isReserved != newDate)
+				{
+					available_rooms++;
+				}
+			}
+		}
+
+		if (available_rooms == 0)
+			System.out.println("\n\t\t\tThere are no available rooms of type " + newType + "on the requested date " + newDate);
+		else
+			System.out.println("\n\t\t\t "+ vailable_rooms +  "Rooms is/are available for type" + newType);
+	}
+
+	void room_Update(String newDate, String newType, int roomAmount) // room update for availability
+	{
+		int roomFlag = 0;
+		String aab = "NA/NA/NA";
+		for (int i = 0; i < MAX_ROOMS; i++)
+		{
+			if (rooms[i].type == newType)
+			{
+				if (rooms[i].isReserved == aab)
+				{
+					rooms[i].isReserved = newDate;
+					roomFlag++;
+					if(roomFlag == roomAmount)
+						i = MAX_ROOMS;
+				}
+			}
+		}
+	}
 
 	    static void clearScreen() {
 	        System.out.print("\033[H\033[2J");
