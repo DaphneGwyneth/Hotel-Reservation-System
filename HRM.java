@@ -1,4 +1,10 @@
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class HRM {
 	
 	 private static final int MAX = 30; // number of users
@@ -8,6 +14,9 @@ public class HRM {
 	    private static final int MAX_PASSWORD_LENGTH = 31;
 	    private static final int MAX_DATE_LENGTH = 10;
 	    private static final int MAX_TYPE_LENGTH = 10;
+		private static final String RESERVATION_FILE = "reservations.txt";
+		private static final String USER_ACCOUNTS_FILE = "UsersAcc.txt";
+	
 
 	    static class Reservation {
 	        String name;
@@ -244,14 +253,102 @@ public class HRM {
 
 static void saveReservation(Reservation reservation, Room room) {
 	// Save reservation 
+	try (BufferedWriter writer = new BufferedWriter(new FileWriter(RESERVATION_FILE, true))) {
+		writer.write(res.getName() + " " + res.getDate() + " " + res.getType() + " "
+				+ res.getRoomNum() + " " + res.getBill() + " " + room.getId() + "\n");
+	} catch (IOException e) {
+		System.out.println("Error saving reservation: " + e.getMessage());
+	}
+
+	roomUpdate(res.getDate(), res.getType(), res.getRoomNum());
+
 }
 
 static void displayReservationDetails(Reservation reservation, Room room) {
 	// Display reservation details 
+	System.out.println("+============================================+");
+	System.out.println("|\t          RESERVATION DETAILS           |");
+	System.out.println("+============================================+");
+	System.out.println("| Room Type |   Date   | No. of Rooms| Price |");
+	System.out.println("|--------------------------------------------|");
+	System.out.printf("| %8s  | %s | %11d | %2.0f  |\n", res.getType(), res.getDate(), res.getRoomNum(), res.getBill());
+	System.out.println("|--------------------------------------------|");
+	System.out.printf("| Total Bill:                      %.2f   |\n", res.getBill());
+	System.out.println("+--------------------------------------------+");
+	System.out.println("Reservation Room ID: " + room.getId());
+	System.out.println("\t    Your reservation is complete.");
+	System.out.println("\t    Get ready to relax and unwind!");
+
+
 }
 
 
-// makereservation purposes
+static void saveUser(User[] users, int marker) {
+	try (BufferedWriter writer = new BufferedWriter(new FileWriter(USER_ACCOUNTS_FILE))) {
+		for (int i = 0; i <= marker; i++) {
+			writer.write(users[i].getEmail() + "\t" + users[i].getPassword() + "\n");
+		}
+	} catch (IOException e) {
+		System.out.println("Error saving user accounts: " + e.getMessage());
+	}
+}
+
+
+static void retrieveReservations() {
+	try (BufferedReader reader = new BufferedReader(new FileReader(RESERVATION_FILE))) {
+		String line;
+
+		while ((line = reader.readLine()) != null) {
+			String[] parts = line.split(" ");
+			if (parts.length >= 6) {
+				Reservation res = new Reservation();
+				Room room = new Room();
+
+				res.setName(parts[0]);
+				res.setDate(parts[1]);
+				res.setType(parts[2]);
+				res.setRoomNum(Integer.parseInt(parts[3]));
+				res.setBill(Double.parseDouble(parts[4]));
+				room.setId(Integer.parseInt(parts[5]));
+
+				displayReservationDetails(res, room);
+				roomUpdate(res.getDate(), res.getType(), res.getRoomNum());
+			}
+		}
+	} catch (IOException e) {
+		System.out.println("Error retrieving reservations: " + e.getMessage());
+	}
+}
+
+static void retrieveData() {
+	retrieveUser();
+	retrieveReservations();
+}
+
+static void retrieveUser() {
+	try (BufferedReader reader = new BufferedReader(new FileReader(USER_ACCOUNTS_FILE))) {
+		String line;
+
+		while ((line = reader.readLine()) != null) {
+			String[] parts = line.split("\t");
+			if (parts.length >= 2) {
+				User user = new User();
+				user.setEmail(parts[0]);
+				user.setPassword(parts[1]);
+
+				// Decrypt password if needed
+				// decryptPassword(user.getPassword(), 0xFACA);
+
+				addAccount(user);
+			}
+		}
+	} catch (IOException e) {
+		welcome();
+	}
+}
+
+
+// makeReservation purposes
 public String getName() {
 	return name;
 }
@@ -292,7 +389,7 @@ public void setBill(float bill) {
 	this.bill = bill;
 }
 
-// makereservation purposes
+// makeReservation purposes
 class Room {
 private int id;
 
