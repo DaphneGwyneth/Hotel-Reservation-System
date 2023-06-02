@@ -95,7 +95,7 @@ public class HRM {
 				            sc.nextLine();
 				            break;
 				        case 4:
-				           // makeReservation();
+				            makeReservation();
 				            break;
 				        case 5:
 				            System.out.print("\t  Thank you for visiting our site!\n");
@@ -180,4 +180,129 @@ public class HRM {
 	    }
 	
 	
+}
+
+
+
+    static int makeReservation() {
+		clearScreen();
+
+	System.out.println("+============================================+");
+	System.out.println("|\t          MAKE A RESERVATION            |");
+	System.out.println("+============================================+");
+
+	Reservation reservation = new Reservation();
+	Room room = new Room();
+
+	System.out.print("Name: ");
+	Scanner scanner = new Scanner(System.in);
+	reservation.setName(scanner.nextLine());
+
+	System.out.print("Date (MM/DD/YY): ");
+	reservation.setDate(scanner.nextLine());
+
+	System.out.print("Room Type (Standard/Deluxe/Suite): ");
+	reservation.setType(scanner.nextLine());
+
+	System.out.print("Number of Rooms: ");
+	reservation.setRoomNum(scanner.nextInt());
+
+	// calculate bill
+	float price;
+	if (reservation.getType().equals("Standard")) {
+		price = 3000.0f;
+		System.out.println("Standard = 3,000");
+	} else if (reservation.getType().equals("Deluxe")) {
+		price = 6000.0f;
+		System.out.println("Deluxe = 6,000");
+	} else if (reservation.getType().equals("Suite")) {
+		price = 10000.0f;
+		System.out.println("Suite = 10,000");
+	} else {
+		System.out.println("\t       Invalid room type. Please try again.");
+		try {
+			Thread.sleep(2000); // delay for 2 seconds
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return;
+	
+	}
+
+	reservation.setBill(price * reservation.getRoomNum());
+
+	int randomId = (int) (Math.random() * 100) + 1; // randomizing Reservation ID number from 1-100
+	room.setId(randomId);
+
+	// save reservation
+	saveReservation(reservation, room);
+	System.out.println("\t       Reservation successful!");
+	displayReservationDetails(reservation, room);
+}
+
+
+
+static void saveReservation(Reservation reservation, Room room) {
+	// Save reservation 
+}
+
+static void displayReservationDetails(Reservation reservation, Room room) {
+	// Display reservation details 
+}
+
+
+// makereservation purposes
+public String getName() {
+	return name;
+}
+
+public void setName(String name) {
+	this.name = name;
+}
+
+public String getDate() {
+	return date;
+}
+
+public void setDate(String date) {
+	this.date = date;
+}
+
+public String getType() {
+	return type;
+}
+
+public void setType(String type) {
+	this.type = type;
+}
+
+public int getRoomNum() {
+	return roomNum;
+}
+
+public void setRoomNum(int roomNum) {
+	this.roomNum = roomNum;
+}
+
+public float getBill() {
+	return bill;
+}
+
+public void setBill(float bill) {
+	this.bill = bill;
+}
+
+// makereservation purposes
+class Room {
+private int id;
+
+// Getters and setters go here
+
+public int getId() {
+	return id;
+}
+
+public void setId(int id) {
+	this.id = id;
+}
 }
