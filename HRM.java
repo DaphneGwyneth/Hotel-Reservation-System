@@ -23,7 +23,46 @@ public class HRM {
 	        String date;
 	        String type;
 	        int roomNum;
-	        float bill;
+	        private float bill;
+			public void setName(String name) {
+				this.name = name;
+			}
+		
+			public void setDate(String date) {
+				this.date = date;
+			}
+		
+			public void setType(String type) {
+				this.type = type;
+			}
+		
+			public void setRoomNum(int roomNum) {
+				this.roomNum = roomNum;
+			}
+		
+			public void setBill(float bill) {
+				this.bill = bill;
+			}
+		
+			public String getName() {
+				return name;
+			}
+		
+			public String getDate() {
+				return date;
+			}
+		
+			public String getType() {
+				return type;
+			}
+		
+			public int getRoomNum() {
+				return roomNum;
+			}
+		
+			public double getBill() {
+				return bill;
+			}
 	    }
 
 	    static class User {
@@ -31,7 +70,22 @@ public class HRM {
 	        String pass;
 	        int numReservations;
 	        Reservation[] reservations = new Reservation[MAX_ROOMS];
-	    }
+			public void setEmail(String email) {
+				this.email = email;
+			}
+		
+			public void setPassword(String pass) {
+				this.pass = pass;
+			}
+		
+			public String getEmail() {
+				return email;
+			}
+		
+			public String getPassword() {
+				return pass;
+			}
+		}
 
 	    static User[] lg = new User[MAX];
 	    static Room[] rooms = new Room[MAX_ROOMS];
@@ -45,8 +99,25 @@ public class HRM {
 	        String type;
 	        float price;
 	        int availableRooms;
+			boolean availability;
 	        String isReserved;
-	    }
+
+			// Getters and setters go here
+			public void setId(int id) {
+				this.id = id;
+			}
+			public int getId() {
+				return id;
+			}
+			public void setAvailability(boolean availability) {
+				this.availability = availability;
+			}
+			public boolean isAvailable() {
+				return availability;
+			}
+
+
+	}
 
 
 	public static void main(String[] args) {
@@ -63,19 +134,20 @@ public class HRM {
 				    System.out.println("+===============================================+");
 				    choice = sc.nextInt();
 
+					/* 
 				    if (choice == 1) {
 				      //  registerUser(a);
 				        break;
 				    } else if (choice == 2) {
 				     //   hotelInformation();
-				    } else if (choice == 5) {
+					} else if (choice == 5) {
 				        System.exit(0);
 				    } else {
 				        System.out.print("\t  Please Login/Register first");
 				        sc.nextLine();
 				        sc.nextLine();
 				    }
-				}
+				} */
 
 				while (choice != 5) {
 				    clearScreen();
@@ -115,7 +187,8 @@ public class HRM {
 				            sc.nextLine();
 				    }      
 				}
-			}    
+			}
+		}    
 
 	}
 
@@ -161,10 +234,10 @@ public class HRM {
 		if (available_rooms == 0)
 			System.out.println("\n\t\t\tThere are no available rooms of type " + newType + "on the requested date " + newDate);
 		else
-			System.out.println("\n\t\t\t "+ vailable_rooms +  "Rooms is/are available for type" + newType);
+			System.out.println("\n\t\t\t "+ available_rooms +  "Rooms is/are available for type" + newType);
 	}
 
-	void room_Update(String newDate, String newType, int roomAmount) // room update for availability
+	static void room_Update(String newDate, String newType, int roomAmount) // room update for availability
 	{
 		int roomFlag = 0;
 		String aab = "NA/NA/NA";
@@ -187,13 +260,10 @@ public class HRM {
 	        System.out.print("\033[H\033[2J");
 	        System.out.flush();
 	    }
-	
-	
-}
 
 
-
-    static int makeReservation() {
+    static void makeReservation() 
+	{
 		clearScreen();
 
 	System.out.println("+============================================+");
@@ -217,7 +287,7 @@ public class HRM {
 	reservation.setRoomNum(scanner.nextInt());
 
 	// calculate bill
-	float price;
+	float price = 0.0f;
 	if (reservation.getType().equals("Standard")) {
 		price = 3000.0f;
 		System.out.println("Standard = 3,000");
@@ -234,7 +304,8 @@ public class HRM {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return;
+		//return;
+		System.exit(0); // Terminate the program
 	
 	}
 
@@ -251,7 +322,7 @@ public class HRM {
 
 
 
-static void saveReservation(Reservation reservation, Room room) {
+static void saveReservation(Reservation res, Room room) {
 	// Save reservation 
 	try (BufferedWriter writer = new BufferedWriter(new FileWriter(RESERVATION_FILE, true))) {
 		writer.write(res.getName() + " " + res.getDate() + " " + res.getType() + " "
@@ -260,11 +331,11 @@ static void saveReservation(Reservation reservation, Room room) {
 		System.out.println("Error saving reservation: " + e.getMessage());
 	}
 
-	roomUpdate(res.getDate(), res.getType(), res.getRoomNum());
+	room_Update(res.getDate(), res.getType(), res.getRoomNum());
 
 }
 
-static void displayReservationDetails(Reservation reservation, Room room) {
+static void displayReservationDetails(Reservation res, Room room) {
 	// Display reservation details 
 	System.out.println("+============================================+");
 	System.out.println("|\t          RESERVATION DETAILS           |");
@@ -308,11 +379,11 @@ static void retrieveReservations() {
 				res.setDate(parts[1]);
 				res.setType(parts[2]);
 				res.setRoomNum(Integer.parseInt(parts[3]));
-				res.setBill(Double.parseDouble(parts[4]));
+				res.setBill(Float.parseFloat(parts[4]));
 				room.setId(Integer.parseInt(parts[5]));
 
 				displayReservationDetails(res, room);
-				roomUpdate(res.getDate(), res.getType(), res.getRoomNum());
+				room_Update(res.getDate(), res.getType(), res.getRoomNum());
 			}
 		}
 	} catch (IOException e) {
@@ -339,67 +410,11 @@ static void retrieveUser() {
 				// Decrypt password if needed
 				// decryptPassword(user.getPassword(), 0xFACA);
 
-				addAccount(user);
+				//addAccount(user);
 			}
 		}
 	} catch (IOException e) {
-		welcome();
+		//welcome();
 	}
-}
-
-
-// makeReservation purposes
-public String getName() {
-	return name;
-}
-
-public void setName(String name) {
-	this.name = name;
-}
-
-public String getDate() {
-	return date;
-}
-
-public void setDate(String date) {
-	this.date = date;
-}
-
-public String getType() {
-	return type;
-}
-
-public void setType(String type) {
-	this.type = type;
-}
-
-public int getRoomNum() {
-	return roomNum;
-}
-
-public void setRoomNum(int roomNum) {
-	this.roomNum = roomNum;
-}
-
-public float getBill() {
-	return bill;
-}
-
-public void setBill(float bill) {
-	this.bill = bill;
-}
-
-// makeReservation purposes
-class Room {
-private int id;
-
-// Getters and setters go here
-
-public int getId() {
-	return id;
-}
-
-public void setId(int id) {
-	this.id = id;
 }
 }
