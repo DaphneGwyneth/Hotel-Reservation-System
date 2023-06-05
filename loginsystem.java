@@ -1,39 +1,22 @@
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+
+
+
 public class loginsystem {
+	public static int choice; 
+	public static Scanner sc = new Scanner(System.in);
+	
     public static void main (String [] args){
-
-        int choice = 0;
-        try (Scanner sc = new Scanner(System.in)) {
-            while (choice != 1) {
+    	
+         adminlogin();
+            while (true) {
                 clearScreen();
-                displayMenu();
-                System.out.println("| Enter your choice:       \t\t\t|");
-                System.out.println("+===============================================+");
-                choice = sc.nextInt();
 
-                if (choice == 1) {
-                  //  registerUser(a);
-                    break;
-                } else if (choice == 2) {
-                 //   hotelInformation();
-                } else if (choice == 5) {
-                    System.exit(0);
-                } else {
-                    System.out.print("\t  Please Login/Register first");
-                    sc.nextLine();
-                    sc.nextLine();
-                }
-            }
-
-            while (choice != 5) {
-                clearScreen();
-                displayMenu();
-                System.out.print("| Enter your choice:       \t\t\t|\n");
-                System.out.print("+============================================+\n");
-                choice = sc.nextInt();
-
-                switch (choice) {
+                switch (displayMenu()) {
                     case 1:
-                        System.out.print("\tYou are now Logged in/Registered " +
+                        System.out.print("\tYou are now Logged in " +
                                 "and can now make a reservation!\n");
                         sc.nextLine();
                         sc.nextLine();
@@ -51,7 +34,7 @@ public class loginsystem {
                         sc.nextLine();
                         break;
                     case 4:
-                        makeReservation();
+                     //   makeReservation();
                         break;
                     case 5:
                         System.out.print("\t  Thank you for visiting our site!\n");
@@ -64,77 +47,62 @@ public class loginsystem {
             }
         }    
 
-    }
+    
 
-    static void login(){
-        User b;
-        char eme[], password[];
-        system("cls");
-        System.out.print("+===============================================================+");
-        System.out.print("|\t            Hotel Picadili Travels      \t\t|");
-        System.out.print("+=============+===============================================================+=============+");
-        System.out.print("----------------------------------");
-        System.out.print("       Picadili Registration");
-        System.out.print("----------------------------------");
-        System.out.print("Enter Email: ");
-        System.out.print("Enter Password: ");
+    static void adminlogin(){
+        //User b;
+
+        System.out.println("+===============================================================+");
+        System.out.println("|\t            Hotel Picadili Travels      \t\t|");
+        System.out.println("+=============+===============================================================+=============+");
+        System.out.println("----------------------------------");
+        System.out.println("       Picadili Registration");
+        System.out.println("----------------------------------");
+        System.out.println("Enter Email: ");
+        String email = sc.nextLine();
+        System.out.println("Enter Password: ");
+        String password = sc.nextLine();
         //System.out.print("----------------------------------");
         //System.out.print("|                                  |");
         //System.out.print("----------------------------------");
-        eme = sc.nextInt();
-
-        int i = 0;
-        gotoxy(62,12);
-        while (1)
-        {
-            char ch = getch();
-            if (ch == '\r' || ch == '\n') { // enter key
-                break;
-            } else if (ch == '\b') { // backspace key
-                if (i > 0) {
-                    i--;
-                    System.out.print("\b \b");
-                }
-            } else {
-                if (i < MAX_PASSWORD_LENGTH) {
-                    password[i] = ch;
-                    i++;
-                    System.out.print("*"); // password privacy
-                }
+       
+        try {
+            File Obj = new File("admin.txt");
+            Scanner Reader = new Scanner(Obj);
+            while (Reader.hasNextLine()) {
+                String data = Reader.nextLine();
+                System.out.println(data);
+                sc.nextLine();
             }
+            Reader.close();
         }
-        password[i] = '\0';
+        catch (FileNotFoundException e) {
+            System.out.println("An error has occurred.");
+            e.printStackTrace();
+            sc.nextLine();
+        }
+       
+     
     
-        if (authentication(eme, password) == 1)
+     /*   if (authentication(eme, password) == 1)
         {
-            System.out.print("      Login Successful!"); sleep(2);
+            System.out.print("      Login Successful!");
         }
         else if (authentication(eme, password) == 0)
         {
             String email = String.valueOf(eme);
             encrypt_password(password, 0xFACA);
-            String pass = String.valueOf(password);
+            String pass = String.valueOf(password);*/
 
-            /*  strcpy(a->email, &eme);
-             encrypt_password(password, 0xFACA);
-             strcpy(a->pass, &password);
-             addAccount(a);
+            
     
-              for (int i = 0; i <= marker; i++)
-            {
-                          encrypt_password(password, 0xFACA);
-                          System.out.print("%s", password);
-            }
-            getch();*/
-    
-             save_user();
+          //   save_user();
               System.out.print("      Registration Successful!\n");
-        sleep(2);  // delay
     
         }
-    }
+    
 
-    static void displayMenu() {
+    static int displayMenu() {
 		System.out.println("+===============================================+");
 		System.out.println("|\t       Hotel Picadili Travels    \t|");
 		System.out.println("+===============================================+");
@@ -145,11 +113,38 @@ public class loginsystem {
 		System.out.println("|\t    [4] : Exit       \t\t\t|");
 		System.out.println("|\t\t\t\t\t\t|");
 		System.out.println("+===============================================+");
+		
+		   System.out.print("| Enter your choice:       \t\t\t|\n");
+           System.out.print("+============================================+\n");
+          choice = sc.nextInt();
+          
+          return choice;
 	}
+    
+    /*
+    static void authentication(char a, char b) {
+    	int i;
+    	    for (i = 0; i <= marker; i++)
+    	    {
+    	        if (strcmp(x, lg[i].email) == 0 && strcmp(y, lg[i].pass) == 0)
+    	        {
+    	            return 1;
+    	        }
+    	    }
 
+    	    return 0;
+    	
+    }
+    
+    static int locate() {
+    	//
+    }
+*/
     static void clearScreen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
+    
+    
 
 }
