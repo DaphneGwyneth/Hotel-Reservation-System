@@ -1,17 +1,24 @@
 
+
 import java.util.Scanner;
 import java.util.StringTokenizer;
+
+import javax.crypto.Cipher;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
+//import java.io.BufferedWriter;
+//import java.io.FileWriter;
+//import java.io.IOException;
 
 
 public class loginsystem2 {
 	public static int choice; 
 	public static Scanner sc = new Scanner(System.in);
+	static Cipher cipher;  
 	
-	
-    public static void main (String [] args){
+
+    public static void main (String [] args)  {
     	
          adminlogin();
             while (true) {
@@ -52,9 +59,10 @@ public class loginsystem2 {
 
     
 
-    static void adminlogin(){
+   public static void adminlogin()  {
         //User b;
       clearScreen();
+      
         System.out.println("+===============================================================+");
         System.out.println("|\t            Hotel Picadili Travels      \t\t|");
         System.out.println("+=============+===============================================================+=============+");
@@ -67,29 +75,76 @@ public class loginsystem2 {
         //System.out.print("|                                  |");
         //System.out.print("----------------------------------");
         
-        
+        //TEST
+   /*     try {
+            int key = 58;
+            BufferedWriter writer = new BufferedWriter(new FileWriter("admin.txt"));
+            String text = "admin";  String text1 = "123123";
+            char [] chars = text.toCharArray();
+            for(char c : chars) {
+        		c+= key;
+        		writer.write(c);
+        		System.out.print(c);
+        	}
+        	writer.write("\t");
+            char [] chara = text1.toCharArray();
+        	
+            	for(char c : chara) {
+        	    	c+= key;
+        	    	writer.write(c);
+        		 System.out.print(c);
+        	 }
+                writer.close();
+            	 }catch(IOException e) {
+                 	System.out.print("File not found");
+                 	}*/
         try {
+        int key = 58;
         BufferedReader reader = new BufferedReader(new FileReader("admin.txt"));
         String line;
         while ((line = reader.readLine()) != null) {
+        	 try {
+                 
         	StringTokenizer stn = new StringTokenizer (line);
-        	String username = stn.nextToken();
+        	String username =  stn.nextToken();
         	String pass = stn.nextToken();
         	
-        //	 System.out.print(username + pass); 
-        	 if (email.equalsIgnoreCase("admin") && password.equalsIgnoreCase("123123")) {
+        	char [] chars = username.toCharArray();
+        	
+        	String UN = "";
+        	for(char c : chars) {
+        		c-= key;
+        		UN = UN + c;
+        		
+        	}
+        	//System.out.print(UN);
+        	
+        	//System.out.print("    ");
+        	String PW = "";
+            char [] chara = pass.toCharArray();
+        	
+            	for(char c : chara) {
+        	    	c-= key;
+        	    	PW = PW + c;
+        	 }
+            //	System.out.print(PW);
+            	
+        	 if (email.equalsIgnoreCase(UN) && password.equalsIgnoreCase(PW)) {
              	System.out.println("Logged in Successfuly!");
              } 
         	 else {
              	adminlogin();
              }
+        	 } catch (Exception ignored) {}
         }
         reader.close();
         }catch(IOException e) {
         	System.out.print("File not found");
         }
-        }
-    
+            }
+        
+
+		
 
     static int displayMenu() {
 		System.out.println("+===============================================+");
@@ -116,9 +171,20 @@ public class loginsystem2 {
         System.out.flush();
     }
     
-    
-    
+
+
+   
+/*public static String decrypt(String encryptedText, SecretKey secretKey)
+        throws Exception {
+    Base64.Decoder decoder = Base64.getDecoder();
+    byte[] encryptedTextByte = decoder.decode(encryptedText);
+    cipher.init(Cipher.DECRYPT_MODE, secretKey);
+    byte[] decryptedByte = cipher.doFinal(encryptedTextByte);
+    String decryptedText = new String(decryptedByte);
+    return decryptedText;
+}
+*/
+	} 
     
 
-}
 
