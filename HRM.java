@@ -119,11 +119,28 @@ public class HRM {
 
 	}
 
+	static void init(){
+        Room[] rooms;
+        rooms = new Room[MAX_ROOMS];
+        int ab = 0;
+        String aab = "NA/NA/NA";
+        while(ab <= MAX_ROOMS)
+        {
+            rooms[ab].isReserved = aab;
+            if (ab <= 2)
+                rooms[ab].type ="Suite";
+            else if (ab <= 5)
+                rooms[ab].type ="Deluxe";
+            else
+                rooms[ab].type ="Standard";
+            ab++;
+        }
+    }
 
 	public static void main(String[] args) {
 
-		/*  init();
-	        retrieveData();
+		    init();
+	        /*retrieveData();
 	        User a = new User();   */
 	        int choice = 0;
 	        try (Scanner sc = new Scanner(System.in)) {
@@ -171,7 +188,7 @@ public class HRM {
 				            System.out.print("+============================================+\n");
 				            System.out.print("|\t             AVAILABILITY               |\n");
 				            System.out.print("+============================================+\n");
-				          //  availability();
+				            availability();
 				            sc.nextLine();
 				            sc.nextLine();
 				            break;
@@ -235,6 +252,8 @@ public class HRM {
 			System.out.println("\n\t\t\tThere are no available rooms of type " + newType + "on the requested date " + newDate);
 		else
 			System.out.println("\n\t\t\t "+ available_rooms +  "Rooms is/are available for type" + newType);
+		
+		scan.close();
 	}
 
 	static void room_Update(String newDate, String newType, int roomAmount) // room update for availability
@@ -285,6 +304,7 @@ public class HRM {
 
 	System.out.print("Number of Rooms: ");
 	reservation.setRoomNum(scanner.nextInt());
+	scanner.close();
 
 	// calculate bill
 	float price = 0.0f;
